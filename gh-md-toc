@@ -69,7 +69,7 @@ gh_toc_md2html() {
 
     local gh_tmp_file_md=$gh_file_md
     if [ "$skip_header" = "yes" ]; then
-        if grep -Fxq "<!--te-->" "$gh_src"; then
+        if grep -Fxq "<!--te-->" "$gh_file_md"; then
           # cut everything before the toc
           gh_tmp_file_md=$gh_file_md~~
           sed '1,/<!--te-->/d' "$gh_file_md" > "$gh_tmp_file_md"
@@ -77,16 +77,17 @@ gh_toc_md2html() {
     fi
 
     # echo $URL 1>&2
+    local curl_rc=0
     OUTPUT=$(curl -s \
         --user-agent "$gh_user_agent" \
         --data-binary @"$gh_tmp_file_md" \
         -H "Content-Type:text/plain" \
         -H "$AUTHORIZATION" \
-        "$URL")
+        "$URL") || curl_rc=$?
 
     rm -f "${gh_file_md}~~"
 
-    if [ "$?" != "0" ]; then
+    if [ "$curl_rc" != "0" ]; then
         echo "XXNetworkErrorXX"
     fi
     if [ "$(echo "${OUTPUT}" | awk '/API rate limit exceeded/')" != "" ]; then

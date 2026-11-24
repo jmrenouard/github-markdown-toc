@@ -25,6 +25,16 @@ better to use a golang based implementation:
 It's more solid, reliable and with ability of a parallel processing. And
 absolutely without dependencies.
 
+Structured tutorials, ASD-STE100 operational guides, CLI reference tables, and architecture notes are available in the [Diátaxis documentation](docs/index.md).
+
+```mermaid
+flowchart LR
+    IN["Input (STDIN, Local MD, or GitHub URL)"] --> API["GitHub Markdown API or HTTP Fetch"]
+    API --> HTML["Rendered Heading HTML (user-content-*)"]
+    HTML --> GRAB["sed + grep -Eo + awk Anchor Parser"]
+    GRAB --> OUT["Stdout TOC or --insert between <!--ts--> / <!--te-->"]
+```
+
 Table of contents
 =================
 
@@ -216,7 +226,7 @@ You can easily combine both ways:
 ```bash
 ➥ ./gh-md-toc \
     ~/projects/Dockerfile.vim/README.md \
-    https://github.com/ekalinin/sitemap.s/blob/master/README.md
+    https://github.com/ekalinin/sitemap.js/blob/master/README.md
 
   * [Dockerfile.vim](~/projects/Dockerfile.vim/README.md#dockerfilevim)
   * [Screenshot](~/projects/Dockerfile.vim/README.md#screenshot)
